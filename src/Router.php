@@ -41,7 +41,8 @@ class Router
         foreach ($router::$routes as $route) {
             if ($route["method"] === $method && $router->matchPath($route["path"], $path)) {
                 $handler = $route["handler"];
-                return $handler();
+                echo json_encode($handler());
+                return;
             }
         }
 
