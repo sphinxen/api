@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Api\Endpoint;
-
 
 use Api\Request;
 

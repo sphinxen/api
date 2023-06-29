@@ -7,6 +7,12 @@ use Api\Request;
 
 class Product
 {
+    /**
+     * Get the most puchased products based on data from previous orders
+     *
+     * @param int $nbrOfResults
+     * @return mixed
+     */
     public static function mostPopular(int $nbrOfResults = 3)
     {
         $response = Request::get("orders", [
@@ -31,6 +37,12 @@ class Product
         return self::fetchData(array_keys(array_slice($productCount, 0, $nbrOfResults, true)));
     }
 
+    /**
+     * Fetches product information
+     *
+     * @param array $product_ids
+     * @return mixed
+     */
     public static function fetchData(array $product_ids)
     {
         return Request::get("products", [

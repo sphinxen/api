@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Api;
 
 use GuzzleHttp\Client;
@@ -26,6 +25,13 @@ class Request
         return self::$instance;
     }
 
+    /**
+     * Perform a GET request towards external API
+     *
+     * @param string $endpoint
+     * @param array $options
+     * @return mixed
+     */
     public static function get(string $endpoint, array $options = []) {
         return self::getInstance()->request("get", $endpoint, $options);
     }
