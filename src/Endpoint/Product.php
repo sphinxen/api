@@ -22,28 +22,21 @@ class Product
                     $productCount[$product->product_id]["count"] += (int)$product->qty;
                 } else {
                     $productCount[$product->product_id]["count"] = $product->qty;
-                    $productCount[$product->product_id]["product"] = $product;
-
                 }
             }
         }
 
         uasort($productCount, fn($p1, $p2) => $p2["count"] <=> $p1["count"]);
 
-        if ($_GET["include_details"] ?? false) {
-            return self::details(array_keys($productCount));
-        }
-        return array_slice($productCount, 0 , $nbrOfResults);
+        return self::fetchData(array_keys(array_slice($productCount, 0, $nbrOfResults, true)));
     }
 
-    public static function details(array $product_ids)
+    public static function fetchData(array $product_ids)
     {
-        $response = Request::get("orders", [
+        return Request::get("products", [
             "query" => [
-                "include_details" => "true",
+                "product_id" => implode(",", $product_ids),
             ]
         ]);
-
-        return json_decode($response->getBody()->getContents());
     }
 }
