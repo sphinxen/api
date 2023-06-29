@@ -41,7 +41,22 @@ class Router
         foreach ($router::$routes as $route) {
             if ($route["method"] === $method && $router->matchPath($route["path"], $path)) {
                 $handler = $route["handler"];
-                echo json_encode($handler());
+                header('Content-Type: application/json; charset=utf-8');
+                try {
+                    echo json_encode($handler());
+                } catch (\Exception $e) {
+                    switch ($e->getCode()) {
+                        case 404:
+                            http_response_code(404);
+                            $message = "No records found";
+                            break;
+                        default:
+                            $message = $e->getMessage();
+                    }
+                    echo json_encode([
+                        "error" => $message,
+                    ]);
+                }
                 return;
             }
         }
