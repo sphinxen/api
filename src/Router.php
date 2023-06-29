@@ -38,10 +38,10 @@ class Router
     public static function dispatch(string $method, string $path)
     {
         $router = self::getInstance();
+        header('Content-Type: application/json; charset=utf-8');
         foreach ($router::$routes as $route) {
             if ($route["method"] === $method && $router->matchPath($route["path"], $path)) {
                 $handler = $route["handler"];
-                header('Content-Type: application/json; charset=utf-8');
                 try {
                     echo json_encode($handler());
                 } catch (\Exception $e) {
@@ -62,7 +62,7 @@ class Router
         }
 
         http_response_code(404); // Not Found
-        return json_encode(['error' => 'Endpoint not found']);
+        echo json_encode(['error' => 'Endpoint not found']);
     }
 
     private static function matchPath(string $pattern, string $path): string
