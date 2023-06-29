@@ -37,8 +37,17 @@ class Request
             ["auth" => [$_ENV["API_KEY"], $_ENV["API_KEY"]]]
         );
 
-        $response = $this->client->request($method, $endpoint, $options);
+        try {
+            $response = $this->client->request($method, $endpoint, $options);
 
-        return json_decode($response->getBody()->getContents());
+            $body = $response->getBody();
+            $content = $body->getContents();
+
+            $data = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+        } catch (\Exception $e) {
+            return json_decode(["error" => "Invalid external response"]);
+        }
+
+        return $data;
     }
 }
